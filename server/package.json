@@ -1,0 +1,6 @@
+{
+  "name": "@sellwave/server", "private": true, "type": "module",
+  "scripts": { "dev": "tsx watch src/index.ts", "build": "tsc", "start": "node dist/index.js", "db:generate": "prisma generate", "db:migrate": "prisma migrate dev", "seed": "tsx prisma/seed.ts" },
+  "dependencies": { "@prisma/client": "^6.6.0", "bcryptjs": "^2.4.3", "cookie-parser": "^1.4.7", "cors": "^2.8.5", "dotenv": "^16.5.0", "express": "^5.1.0", "helmet": "^8.1.0", "jsonwebtoken": "^9.0.2", "zod": "^3.24.4" },
+  "devDependencies": { "@types/bcryptjs": "^2.4.6", "@types/cookie-parser": "^1.4.9", "@types/cors": "^2.8.17", "@types/express": "^5.0.1", "@types/jsonwebtoken": "^9.0.9", "prisma": "^6.6.0", "tsx": "^4.19.3", "typescript": "^5.8.3" }
+}

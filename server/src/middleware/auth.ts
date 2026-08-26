@@ -1,0 +1,3 @@
+import type { NextFunction, Request, Response } from 'express'; import jwt from 'jsonwebtoken'; import { env } from '../config/env.js'; import type { Role } from '@prisma/client';
+export function requireAuth(req:Request,res:Response,next:NextFunction){try{const token=req.cookies.access_token; if(!token) return res.status(401).json({message:'Please sign in to continue.'}); req.auth=jwt.verify(token,env.JWT_SECRET) as {id:string;role:Role}; next();}catch{return res.status(401).json({message:'Your session has expired. Please sign in again.'});}}
+export const requireRole=(...roles:Role[])=>(req:Request,res:Response,next:NextFunction)=>!req.auth||!roles.includes(req.auth.role)?res.status(403).json({message:'You do not have access to this resource.'}):next();

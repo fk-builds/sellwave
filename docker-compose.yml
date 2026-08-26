@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: sellwave
+      POSTGRES_PASSWORD: change-this-in-production
+      POSTGRES_DB: sellwave
+    ports: ["5432:5432"]
+    volumes: ["sellwave_postgres:/var/lib/postgresql/data"]
+volumes:
+  sellwave_postgres:

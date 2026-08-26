@@ -1,0 +1,4 @@
+import 'dotenv/config'; import { z } from 'zod';
+const config=z.object({DATABASE_URL:z.string().url(),JWT_SECRET:z.string().min(32),PORT:z.coerce.number().default(4000),CLIENT_ORIGIN:z.string().url().default('http://localhost:5173'),COOKIE_SECURE:z.enum(['true','false']).default('false'),RESEND_API_KEY:z.string().default(''),EMAIL_FROM:z.string().default('Sell Wave <onboarding@resend.dev>'),OWNER_EMAIL:z.string().email().default('sellwave04@gmail.com')}).safeParse(process.env);
+if(!config.success) { console.error(config.error.flatten().fieldErrors); throw new Error('Invalid environment configuration. Copy .env.example to .env and set values.'); }
+export const env=config.data;
