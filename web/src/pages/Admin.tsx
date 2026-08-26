@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { api } from '../lib/api';
 import { Auth } from './Auth';
+import { UploadField } from '../components/UploadField';
 import { OpsPanel } from './OpsPanel';
 import { PricingAgentPanel } from './PricingAgentPanel';
 import { SettingsPanel } from './SettingsPanel';
@@ -52,6 +53,7 @@ export function Admin() {
   const [rates, setRates] = useState<Rate[]>([]);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [openProduct, setOpenProduct] = useState<string | null>(null);
+  const [uploadedProductImage, setUploadedProductImage] = useState('');
 
   const load = () =>
     Promise.all([
@@ -139,9 +141,11 @@ export function Admin() {
                     method: 'POST',
                     body: JSON.stringify({ ...d, price: Number(d.price), compareAtPrice: d.compareAtPrice ? Number(d.compareAtPrice) : undefined, stockQuantity: Number(d.stockQuantity), weightGrams: d.weightGrams ? Number(d.weightGrams) : undefined, status: 'DRAFT' }),
                   });
-                  if (d.imageUrl) await api(`/admin/products/${p.id}/images`, { method: 'POST', body: JSON.stringify({ url: d.imageUrl, alt: d.name, sortOrder: 0 }) });
+                  const img = uploadedProductImage || d.imageUrl;
+                  if (img) await api(`/admin/products/${p.id}/images`, { method: 'POST', body: JSON.stringify({ url: img, alt: d.name, sortOrder: 0 }) });
                 }, 'Product saved as draft — publish it from the catalogue list below.');
                 e.currentTarget.reset();
+                setUploadedProductImage('');
               }}>
                 <input required name="name" placeholder="Product name" />
                 <input required name="slug" placeholder="product-slug" />
@@ -158,7 +162,11 @@ export function Admin() {
                   <input required type="number" min="0" name="stockQuantity" placeholder="Stock quantity" />
                   <input type="number" min="1" name="weightGrams" placeholder="Weight in grams (optional)" />
                 </div>
-                <input type="url" name="imageUrl" placeholder="Main image URL (optional)" />
+                <div className="inline">
+                  <UploadField label="Upload main photo" onUploaded={(url) => setUploadedProductImage(url)} />
+                  {uploadedProductImage && <img src={uploadedProductImage} alt="" style={{ width: 46, height: 46, objectFit: 'cover' }} />}
+                </div>
+                <input type="url" name="imageUrl" placeholder="…ya image URL paste karein (optional)" />
                 <textarea name="shortDescription" placeholder="Short description" />
                 <input name="seoTitle" placeholder="SEO title (optional)" />
                 <textarea name="seoDescription" placeholder="SEO description (optional)" />
@@ -196,6 +204,9 @@ export function Admin() {
                             </div>
                           ))}
                           {!p.images.length && <small className="minor">No images yet.</small>}
+                        </div>
+                        <div className="inline">
+                          <UploadField label="Upload from phone/PC" onUploaded={(url) => act(() => api(`/admin/products/${p.id}/images`, { method: 'POST', body: JSON.stringify({ url, alt: p.name, sortOrder: p.images.length }) }), 'Image add ho gayi.')} />
                         </div>
                         <form className="inline" onSubmit={(e: FormEvent<HTMLFormElement>) => { e.preventDefault(); const d = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>; act(() => api(`/admin/products/${p.id}/images`, { method: 'POST', body: JSON.stringify({ url: d.url, alt: d.alt || p.name, sortOrder: Number(d.sortOrder || 0) }) })); e.currentTarget.reset(); }}>
                           <input required type="url" name="url" placeholder="Image URL" />

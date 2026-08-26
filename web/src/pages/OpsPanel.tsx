@@ -76,7 +76,7 @@ export function OpsPanel() {
       {message && <p className="success">{message}</p>}
 
       {summary && (
-        <div className="metrics" style={{ gridTemplateColumns: 'repeat(5,1fr)' }}>
+        <div className="metrics ai-metrics">
           <div><Bot size={19} strokeWidth={1.7} /><b>{summary.openApprovals}</b><span>Pending approvals</span></div>
           <div><ShieldAlert size={19} strokeWidth={1.7} /><b>{summary.openAlerts}</b><span>Open alerts</span></div>
           <div><Star size={19} strokeWidth={1.7} /><b>{summary.criticalAlerts}</b><span>Critical</span></div>

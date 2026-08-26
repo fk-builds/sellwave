@@ -197,3 +197,44 @@ footer a{display:inline-flex;align-items:center;gap:5px}
 .addon .button{padding:8px 10px;font-size:12px;justify-content:center}
 @media(max-width:850px){.addon-grid{grid-template-columns:repeat(2,1fr)}}
 .top-review{border-left:3px solid #d8ff56}
+
+/* ---------- Mobile menu drawer ---------- */
+.mobile-nav{position:fixed;top:0;right:0;bottom:0;width:min(320px,86vw);background:var(--ink);z-index:120;padding:26px 26px;transform:translateX(105%);transition:transform .25s ease;display:flex;flex-direction:column}
+.mobile-nav.open{transform:translateX(0)}
+.mobile-nav-backdrop{position:fixed;inset:0;background:rgba(8,14,25,.55);z-index:110}
+.mobile-close{position:absolute;top:18px;right:18px;background:none;border:0;color:#fff;cursor:pointer;padding:6px}
+.mobile-nav-brand{color:#fff;font-weight:800;font-size:22px;letter-spacing:-1px;margin-bottom:18px}
+.mobile-nav-brand span{color:#ff5b3d}
+.mobile-nav-links{display:grid;gap:2px}
+.mobile-nav-links a{color:#fff;font-size:17px;font-weight:800;padding:13px 4px;border-bottom:1px solid rgba(255,255,255,.09)}
+.mobile-nav-links a.active{color:var(--lime)}
+
+/* ---------- Responsive fixes ---------- */
+@media(max-width:900px){.metrics.ai-metrics{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:720px){
+  .metrics{grid-template-columns:repeat(2,1fr)!important}
+  .split{grid-template-columns:1fr}
+  .hero-banner{min-height:430px;padding:56px 22px}
+  .topbar{font-size:10px;padding:8px 12px;line-height:1.5}
+  .timeline{flex-wrap:wrap;row-gap:16px}
+  .timeline li{min-width:19%}
+  .timeline .label{font-size:9px;letter-spacing:0}
+  .table{overflow-x:auto;display:block}
+  .table article{min-width:600px}
+  .checkout h1,.page h1{word-break:break-word}
+  .admin-forms{grid-template-columns:1fr!important}
+  .addon-grid{grid-template-columns:repeat(2,1fr)}
+  .section-head{flex-direction:column;align-items:flex-start;gap:6px}
+  .review-form{padding:14px}
+  .receipt{padding:20px}
+  .whatsapp-float{right:14px;bottom:14px;width:52px;height:52px}
+}
+@media(max-width:400px){
+  .hero-banner h1{font-size:34px}
+  .page h1,.auth h1{font-size:32px}
+  .brand .wordmark{height:19px}
+}
+
+.upload-field{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mobile-nav-brand{color:#fff}
+.mobile-nav-brand span{color:var(--lime)}

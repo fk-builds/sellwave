@@ -4,6 +4,7 @@ import { api } from '../lib/api';
 import { useNavigate, Link } from 'react-router-dom';
 
 type A = { id: string; label: string; recipientName: string; line1: string; city: string };
+type Estimate = { amount: number | null; zone: string | null; rate: string | null };
 type Loyalty = { points: number };
 type Bank = {
   accountTitle?: string; bankName?: string; accountNumber?: string;
@@ -19,6 +20,7 @@ export function Checkout() {
   const [bank, setBank] = useState<Bank | null>(null);
   const [bankOpen, setBankOpen] = useState(false);
   const [reference, setReference] = useState('');
+  const [estimate, setEstimate] = useState<Estimate | null>(null);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
   const nav = useNavigate();
@@ -30,6 +32,12 @@ export function Checkout() {
     api<Loyalty>('/account/loyalty').then(l => setBalance(l.points)).catch(() => setBalance(null));
     api<{ bank: Bank | null }>('/settings/store').then(s => setBank(s.bank)).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const addr = addresses.find(a => a.id === selected);
+    if (!addr) { setEstimate(null); return; }
+    api<Estimate>(`/shipping/estimate?city=${encodeURIComponent(addr.city)}`).then(setEstimate).catch(() => setEstimate(null));
+  }, [selected, addresses]);
 
   const bankReady = !!(bank && (bank.iban || bank.accountNumber || bank.raastNumber));
 
@@ -97,6 +105,16 @@ export function Checkout() {
                 <span className="minor">Redeem up to <b>{balance}</b> points · 1 point = PKR 1 · max half of subtotal. Balance: {balance} pts.</span>
               </div>
             </>
+          )}
+
+          {estimate && (
+            <p className="minor" style={{ marginTop: 14 }}>
+              📦 {estimate.amount !== null
+                ? <>Delivery estimate ({estimate.zone}): <b>PKR {estimate.amount.toLocaleString()}</b> — order total me add ho jayega</>
+                : estimate.zone
+                  ? 'Delivery: is weight ke liye rate set nahi — call par confirm hoga'
+                  : 'Delivery: aapke city ka zone set nahi — call par confirm hoga'}
+            </p>
           )}
 
           <h2 className="iconed"><Wallet size={19} /> Choose payment</h2>

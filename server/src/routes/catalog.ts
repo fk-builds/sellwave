@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { prisma } from '../utils/prisma.js';
+import { requireAuth } from '../middleware/auth.js';
+import { estimateShipping } from '../utils/shippingCalc.js';
 
 const r = Router();
 
@@ -34,6 +36,16 @@ r.get('/products', async (req, res) => {
     take: 60,
   });
   res.json(products);
+});
+
+// Delivery estimate: customer ke cart weight + selected city ke hisab se
+r.get('/shipping/estimate', requireAuth, async (req, res) => {
+  const userId = (req as unknown as { auth?: { id: string } }).auth?.id;
+  if (!userId) return res.status(401).json({ message: 'Sign in required.' });
+  const city = String(req.query.city || '');
+  const items = await prisma.cartItem.findMany({ where: { userId }, include: { product: { select: { weightGrams: true } } } });
+  const weight = items.reduce((s, i) => s + (i.product.weightGrams ?? 500) * i.quantity, 0);
+  res.json({ weightGrams: weight, ...(await estimateShipping(city, weight)) });
 });
 
 r.get('/products/:slug', async (req, res) => {

@@ -6,6 +6,7 @@ import { linePrice } from './cart.js';
 import { loyaltyConfig } from '../utils/loyalty.js';
 import { sendEmail, orderConfirmationEmail, notifyOwnerNewOrder } from '../utils/email.js';
 import { assessOrderRisk, runLowStockCheck, createOpsNotification, emailOwner } from '../utils/ops.js';
+import { estimateShipping } from '../utils/shippingCalc.js';
 
 const r = Router();
 r.use(requireAuth);
@@ -89,7 +90,9 @@ r.post('/checkout', async (req, res, next) => {
     }
 
     const discount = Math.min(couponDiscount + pointsDiscount, subtotal);
-    const shipping = 0;
+    const totalWeight = items.reduce((s, i) => s + (i.product.weightGrams ?? 500) * i.quantity, 0);
+    const shipEst = await estimateShipping(address.city, totalWeight);
+    const shipping = shipEst.amount ?? 0;
 
     const order = await prisma.$transaction(async tx => {
       const o = await tx.order.create({
@@ -128,6 +131,13 @@ r.post('/checkout', async (req, res, next) => {
           await tx.productVariant.update({ where: { id: i.variant.id }, data: { stockQuantity: { decrement: i.quantity } } });
         } else {
           await tx.product.update({ where: { id: i.productId }, data: { stockQuantity: { decrement: i.quantity } } });
+        }
+        // Smart bundle: components ka stock bhi kam karo
+        const bundle = i.product.bundleItems as { productId: string; qty: number }[] | null;
+        if (Array.isArray(bundle)) {
+          for (const comp of bundle) {
+            await tx.product.update({ where: { id: comp.productId }, data: { stockQuantity: { decrement: (comp.qty || 1) * i.quantity } } });
+          }
         }
       }
       if (couponId) {

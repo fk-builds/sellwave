@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { api } from '../lib/api';
 import { Plus, Trash2, Save, Image as ImageIcon } from 'lucide-react';
+import { UploadField } from '../components/UploadField';
 
 type Bank = { accountTitle?: string; bankName?: string; accountNumber?: string; iban?: string; raastNumber?: string; instructions?: string };
 type Slide = { image: string; eyebrow: string; title1: string; title2: string; copy: string; cta: string; link: string; active: boolean };
@@ -66,6 +67,10 @@ export function SettingsPanel() {
                 </label>
                 <button className="text-button" onClick={() => setSlides(arr => arr.filter((_, j) => j !== i))}><Trash2 size={14} /> Remove banner</button>
               </div>
+            </div>
+            <div className="inline">
+              <UploadField label="Upload banner image" onUploaded={(url) => setSlides(arr => arr.map((x, j) => (j === i ? { ...x, image: url } : x)))} />
+              {s.image && <img src={s.image} alt="" style={{ width: 60, height: 30, objectFit: 'cover' }} />}
             </div>
             <div className="split">
               <input value={s.image} onChange={e => setSlides(arr => arr.map((x, j) => (j === i ? { ...x, image: e.target.value } : x)))} placeholder="Banner image URL (/banners/... ya https://...)" style={{ padding: 10, border: '1px solid #cfd3da', font: 'inherit' }} />
