@@ -13,6 +13,7 @@ import { Wishlist } from './pages/Wishlist';
 import { OrderDetail } from './pages/OrderDetail';
 import { OrderConfirmation } from './pages/OrderConfirmation';
 import { Support } from './pages/Support';
+import { Terms } from './pages/Terms';
 import { useStore, waLink } from './lib/store';
 
 const Simple = ({ title, children }: { title: string; children: string }) => (
@@ -55,11 +56,12 @@ export default function App() {
         <Route path="/support" element={<Support />} />
         <Route path="/about" element={<Simple title="About Sell Wave">Sell Wave is a single-owner online mega store serving customers across Pakistan.</Simple>} />
         <Route path="/returns" element={<Returns />} />
+        <Route path="/terms" element={<Terms />} />
         <Route path="*" element={<Simple title="Page not found">The page you requested does not exist.</Simple>} />
       </Routes>
       <footer>
         <span>© {new Date().getFullYear()} Sell Wave. All rights reserved.</span>
-        <span>Pakistan-wide delivery · <a href={waLink(supportWhatsapp)} target="_blank" rel="noreferrer"><MessageCircle size={13} /> WhatsApp support</a> · <a href="/returns"><RotateCcw size={13} /> Returns & refunds</a></span>
+        <span>Pakistan-wide delivery · <a href={waLink(supportWhatsapp)} target="_blank" rel="noreferrer"><MessageCircle size={13} /> WhatsApp support</a> · <a href="/returns"><RotateCcw size={13} /> Returns & refunds</a> · <a href="/terms">Terms & privacy</a></span>
       </footer>
       <a
         className="whatsapp-float"

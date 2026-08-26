@@ -238,3 +238,7 @@ footer a{display:inline-flex;align-items:center;gap:5px}
 .upload-field{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
 .mobile-nav-brand{color:#fff}
 .mobile-nav-brand span{color:var(--lime)}
+
+.terms-body{max-width:820px;margin-top:10px}
+.terms-body h2{font-size:20px;margin:30px 0 8px}
+.terms-body p{font-size:13px;line-height:1.8;color:var(--ink);margin:8px 0}
