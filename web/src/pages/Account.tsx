@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { api } from '../lib/api';
 import { Auth } from './Auth';
+import { useUser } from '../lib/user';
 import { Link, useNavigate } from 'react-router-dom';
 import { Package, Coins, RotateCcw, UserRound, LogOut } from 'lucide-react';
 
@@ -24,6 +25,7 @@ export function Account() {
   const [profileMsg, setProfileMsg] = useState('');
   const [passwordMsg, setPasswordMsg] = useState('');
   const nav = useNavigate();
+  const { clear } = useUser();
 
   useEffect(() => {
     api<{ user: U }>('/auth/me')
@@ -78,8 +80,8 @@ export function Account() {
 
   async function logout() {
     try { await api('/auth/logout', { method: 'POST' }); } catch { /* ignore */ }
+    clear();
     nav('/');
-    window.location.reload();
   }
 
   if (!u) return <Auth />;

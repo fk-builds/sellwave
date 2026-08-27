@@ -14,6 +14,7 @@ import { OrderDetail } from './pages/OrderDetail';
 import { OrderConfirmation } from './pages/OrderConfirmation';
 import { Support } from './pages/Support';
 import { Terms } from './pages/Terms';
+import { Dashboard } from './pages/Dashboard';
 import { Track } from './pages/Track';
 import { useStore, waLink } from './lib/store';
 
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="/returns" element={<Returns />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/track" element={<Track />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<Simple title="Page not found">The page you requested does not exist.</Simple>} />
       </Routes>
       <footer className="lux-footer">

@@ -380,3 +380,64 @@ footer a{display:inline-flex;align-items:center;gap:5px}
   .hero-banner .eyebrow.light{font-size:12px}
   .hero-copy{font-size:14px}
 }
+
+/* ---------- Hero: lighter overlay, text block smaller & pushed right ---------- */
+.hero-banner::before{background:linear-gradient(90deg,rgba(4,9,18,.18) 0%,rgba(4,9,18,.10) 45%,rgba(4,9,18,0) 75%)!important}
+.hero-content{max-width:500px;margin-left:clamp(0px,6vw,110px)}
+.hero-banner .eyebrow.light{font-size:13px;text-shadow:0 1px 8px rgba(0,0,0,.85);margin-bottom:14px}
+.hero-banner h1{font-size:clamp(34px,4.4vw,62px);text-shadow:0 2px 16px rgba(0,0,0,.55)}
+.hero-copy{font-size:14px;color:#eef2f8;opacity:.92;text-shadow:0 1px 8px rgba(0,0,0,.55);margin-bottom:22px}
+@media(max-width:720px){
+  .hero-content{margin-left:0;max-width:100%}
+  .hero-banner::before{background:linear-gradient(180deg,rgba(4,9,18,.15) 0%,rgba(4,9,18,.05) 40%,rgba(4,9,18,.45) 100%)!important}
+  .hero-banner{display:flex;align-items:flex-end}
+  .hero-banner .hero-content{padding-bottom:34px}
+  .hero-banner h1{font-size:30px}
+  .slider-dots{margin-top:16px}
+  .slider-arrows{margin-top:12px}
+  .slider-arrows button{background:rgba(16,24,39,.55)}
+}
+
+/* ---------- Account dropdown ---------- */
+.account-wrap{position:relative}
+.account-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:0;font:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink);padding:0}
+.account-btn-label{max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-backdrop{position:fixed;inset:0;z-index:125}
+.account-menu{position:absolute;top:calc(100% + 12px);right:0;width:252px;background:#fff;border:1px solid var(--line);box-shadow:0 18px 44px rgba(16,24,39,.2);z-index:130;padding:0;display:grid}
+.account-menu-head{padding:14px 16px;border-bottom:1px solid var(--line);display:grid;gap:2px}
+.account-menu-head b{font-size:14px}
+.account-menu-head small{color:var(--muted);font-size:11px;word-break:break-all}
+.account-menu a,.account-menu button{display:flex;gap:10px;align-items:center;width:100%;padding:12px 16px;font:inherit;font-size:13px;font-weight:700;background:none;border:0;border-bottom:1px solid var(--gold-soft);cursor:pointer;color:var(--ink);justify-content:flex-start;text-align:left}
+.account-menu a:hover,.account-menu button:hover{background:#faf6ec;color:var(--gold-deep)}
+.account-menu .logout{color:#b42318;border-bottom:0}
+@media(max-width:720px){.account-btn-label,.account-btn svg:last-child{display:none}}
+
+.mobile-nav-user{color:var(--gold-soft);font-size:13px;font-weight:700;margin-bottom:6px}
+.mobile-logout{display:flex;gap:10px;align-items:center;width:100%;padding:13px 4px;font:inherit;font-size:15px;font-weight:800;background:none;border:0;color:#ffb4a8;cursor:pointer;text-align:left}
+
+/* ---------- Customer dashboard ---------- */
+.dash{padding-top:55px}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:36px 0 30px}
+.stat-card{background:#fff;border:1px solid var(--line);padding:20px;display:grid;gap:6px;justify-items:start}
+.stat-card svg{color:var(--gold-deep)}
+.stat-card b{font-size:30px;letter-spacing:-.03em;line-height:1}
+.stat-card span{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.dash-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start}
+.dash-card{background:#fff;border:1px solid var(--line);padding:20px}
+.dash-card-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
+.dash-card-head h2{margin:0;font-size:18px}
+.dash-orders{display:grid}
+.dash-order-row{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--gold-soft)}
+.dash-order-row:last-child{border-bottom:0}
+.dash-order-row div{display:grid;gap:2px}
+.dash-order-row b{font-size:13px}
+.dash-order-row small{color:var(--muted);font-size:11px}
+.dash-order-row strong{font-size:13px}
+.dash-links{display:grid}
+.dash-links a{display:flex;gap:10px;align-items:center;padding:11px 4px;font-size:13px;font-weight:700;border-bottom:1px solid var(--gold-soft);color:var(--ink)}
+.dash-links a:hover{color:var(--gold-deep);background:#faf6ec;padding-left:10px;transition:all .15s}
+.dash-admin-link{color:var(--gold-deep)!important}
+.dash-points-mini{margin-top:16px;border:1px dashed var(--gold);background:var(--gold-soft);padding:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px}
+.dash-points-mini svg{color:var(--gold-deep)}
+.dash-points-mini .button{padding:7px 12px;font-size:12px}
+@media(max-width:900px){.dash-stats{grid-template-columns:repeat(2,1fr)}.dash-grid{grid-template-columns:1fr}}
