@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { MessageCircle, Mail, PackageSearch, Truck, RotateCcw, Wallet, Coins } from 'lucide-react';
 import { useStore, waLink } from '../lib/store';
 
@@ -43,7 +43,7 @@ export function Support() {
           />
           <button className="button primary">Track</button>
         </form>
-        <p className="minor">Order number aapko email aur order page par milta hai. Sign in kar ke Account → Orders se bhi track kar sakte ho.</p>
+        <p className="minor">Order number aapko email aur order page par milta hai. Ya seedha <Link className="text-link" to="/track">Track Order page</Link> par number daal kar dekhein.</p>
       </section>
 
       <h2 className="faq-head">Frequently asked questions</h2>

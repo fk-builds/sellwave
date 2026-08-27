@@ -14,6 +14,7 @@ import { OrderDetail } from './pages/OrderDetail';
 import { OrderConfirmation } from './pages/OrderConfirmation';
 import { Support } from './pages/Support';
 import { Terms } from './pages/Terms';
+import { Track } from './pages/Track';
 import { useStore, waLink } from './lib/store';
 
 const Simple = ({ title, children }: { title: string; children: string }) => (
@@ -57,6 +58,7 @@ export default function App() {
         <Route path="/about" element={<Simple title="About Sell Wave">Sell Wave is a single-owner online mega store serving customers across Pakistan.</Simple>} />
         <Route path="/returns" element={<Returns />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/track" element={<Track />} />
         <Route path="*" element={<Simple title="Page not found">The page you requested does not exist.</Simple>} />
       </Routes>
       <footer className="lux-footer">

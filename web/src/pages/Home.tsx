@@ -72,7 +72,7 @@ export function Home() {
   return (
     <main>
       {/* ============ HERO SLIDER ============ */}
-      <section className="hero-banner" style={{ backgroundImage: `linear-gradient(90deg,rgba(8,18,33,.84) 0%,rgba(8,18,33,.55) 38%,rgba(8,18,33,.05) 70%),url(${s.image})` }}>
+      <section className="hero-banner" style={{ backgroundImage: `linear-gradient(90deg,rgba(6,12,24,.95) 0%,rgba(6,12,24,.80) 42%,rgba(6,12,24,.28) 75%),url(${s.image})` }}>
         <div className="hero-content">
           <p className="eyebrow light">{s.eyebrow}</p>
           <h1>{s.title1}{s.title2 ? <> <em>{s.title2}</em></> : null}</h1>

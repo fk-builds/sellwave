@@ -27,6 +27,7 @@ export function Header() {
   const navLinks = (
     <>
       <NavLink to="/shop" onClick={() => setOpen(false)}>Shop</NavLink>
+      <NavLink to="/track" onClick={() => setOpen(false)}>Track order</NavLink>
       <NavLink to="/wishlist" onClick={() => setOpen(false)}>Wishlist</NavLink>
       <NavLink to="/account" onClick={() => setOpen(false)}>My account</NavLink>
       <NavLink to="/about" onClick={() => setOpen(false)}>About</NavLink>
@@ -56,6 +57,7 @@ export function Header() {
         </form>
         <nav className="desktop-nav">
           <NavLink to="/shop">Shop</NavLink>
+          <NavLink to="/track">Track</NavLink>
           <NavLink to="/about">About</NavLink>
           <NavLink to="/support">Support</NavLink>
         </nav>
