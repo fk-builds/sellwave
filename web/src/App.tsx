@@ -32,14 +32,14 @@ function Returns() {
       <p className="eyebrow">SELL WAVE</p>
       <h1>Returns & refunds</h1>
       <p className="lede">{returnPolicy || 'Return requests are accepted within 7 days of delivery for damaged, broken or courier-damaged items. Items damaged by misuse or customer handling are not eligible. Approved refunds are processed after inspection.'}</p>
-      <p className="minor">Return request karne ke liye Account → Returns tab use karein ya WhatsApp par rabta karein.</p>
+      <p className="minor">To request a return, use Account → Returns or contact us on WhatsApp.</p>
     </main>
   );
 }
 
 export default function App() {
   const { supportWhatsapp } = useStore();
-  const waFloatHref = waLink(supportWhatsapp, 'Assalam o alaikum! Mujhe Sell Wave se baat karni hai.');
+  const waFloatHref = waLink(supportWhatsapp, 'Hello! I would like to talk to Sell Wave.');
   return (
     <>
       <Header />

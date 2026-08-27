@@ -32,7 +32,7 @@ export function Header() {
       <NavLink to="/account" onClick={() => setOpen(false)}>My account</NavLink>
       <NavLink to="/about" onClick={() => setOpen(false)}>About</NavLink>
       <NavLink to="/support" onClick={() => setOpen(false)}>Support</NavLink>
-      <a href={waLink(supportWhatsapp, 'Assalam o alaikum! Mujhe Sell Wave se baat karni hai.')} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>WhatsApp us</a>
+      <a href={waLink(supportWhatsapp, 'Hello! I would like to talk to Sell Wave.')} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>WhatsApp us</a>
     </>
   );
 

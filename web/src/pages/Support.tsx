@@ -7,7 +7,7 @@ export function Support() {
   const nav = useNavigate();
   const { supportWhatsapp, supportEmail } = useStore();
   const [orderNo, setOrderNo] = useState('');
-  const wa = waLink(supportWhatsapp, 'Assalam o alaikum! Mujhe Sell Wave ki team se baat karni hai.');
+  const wa = waLink(supportWhatsapp, 'Hello! I would like to talk to the Sell Wave team.');
   const waDisplay = (supportWhatsapp || '0311 9579613').replace(/(\d{4})(\d{3})(\d+)/, '$1 $2 $3');
 
   function track(e: FormEvent<HTMLFormElement>) {
@@ -19,7 +19,7 @@ export function Support() {
     <main className="page support">
       <p className="eyebrow">WE'RE HERE TO HELP</p>
       <h1>Support</h1>
-      <p className="lede">24/7 messaging support — WhatsApp par sab se tez jawab milta hai, saal bhar, har din.</p>
+      <p className="lede">24/7 messaging support — WhatsApp gets you the fastest reply — every day, all year.</p>
 
       <div className="support-cards">
         <a className="support-card" href={wa} target="_blank" rel="noreferrer">
@@ -43,42 +43,42 @@ export function Support() {
           />
           <button className="button primary">Track</button>
         </form>
-        <p className="minor">Order number aapko email aur order page par milta hai. Ya seedha <Link className="text-link" to="/track">Track Order page</Link> par number daal kar dekhein.</p>
+        <p className="minor">Your order number is in your email and on the order page. Or open the <Link className="text-link" to="/track">Track Order page</Link> and enter it there.</p>
       </section>
 
       <h2 className="faq-head">Frequently asked questions</h2>
       <div className="faq">
         <details>
-          <summary>Order kab confirm aur deliver hota hai?</summary>
-          <p>COD orders call ya WhatsApp par confirm hone ke baad process hote hain. Bank transfer par payment verify hote hi dispatch hota hai. Delivery ka waqt location par depend karta hai — bade shehron me aam taur par 2–4 working days.</p>
+          <summary>When is my order confirmed & delivered?</summary>
+          <p>COD orders are processed after call/WhatsApp confirmation. Bank transfer orders dispatch right after payment verification. Delivery time depends on your location — typically 2-4 working days in major cities.</p>
         </details>
         <details>
-          <summary>Delivery charges kitne hain?</summary>
-          <p>Charges aapki location aur product weight par depend karte hain. Order confirm se pehle exact charges bata diye jate hain — koi hidden charges nahi.</p>
+          <summary>What are the delivery charges?</summary>
+          <p>Charges depend on your location and product weight. Exact charges are always shown before you confirm the order — no hidden fees.</p>
         </details>
         <details>
-          <summary>Payment options kya hain?</summary>
-          <p>Cash on Delivery aur Bank Transfer (Raast/IBFT) abhi available hain. JazzCash aur Easypaisa jald hi add ho rahe hain.</p>
+          <summary>What payment options are available?</summary>
+          <p>Cash on Delivery and Bank Transfer (Raast/IBFT) are available now. JazzCash and Easypaisa are coming soon.</p>
         </details>
         <details>
-          <summary>Return ya exchange kaise karun?</summary>
-          <p>7 din ke andar Account → Returns se request karein ya WhatsApp par order number ke sath rabta karein. Courier damage, toota hua ya kharab maal replace/refund hota hai — ghalat istemal wali cheez eligible nahi.</p>
+          <summary>How do I return or exchange an item?</summary>
+          <p>Within 7 days, request from Account → Returns or message us on WhatsApp with your order number. Courier-damaged, broken or faulty items are replaced/refunded — damage from misuse is not eligible.</p>
         </details>
         <details>
-          <summary>Wave Points kaise kaam karte hain?</summary>
-          <p>Delivered order par har PKR 100 kharch par 1 point milta hai. 1 point = PKR 1 discount — checkout par redeem karein (order ke aadhe subtotal tak).</p>
+          <summary>How do Wave Points work?</summary>
+          <p>Earn 1 point for every PKR 100 spent on delivered orders. 1 point = PKR 1 discount — redeem at checkout (up to half your order subtotal).</p>
         </details>
         <details>
-          <summary>Order cancel karna ho to?</summary>
-          <p>Dispatch se pehle cancel ho sakta hai — WhatsApp par 0311 9579613 order number ke sath message karein.</p>
+          <summary>How do I cancel an order?</summary>
+          <p>Orders can be cancelled before dispatch — message us on WhatsApp (0311 9579613) with your order number.</p>
         </details>
       </div>
 
       <section className="assurance small">
-        <div><Truck size={20} strokeWidth={1.7} /><b>Pakistan-wide delivery</b><span>Har shehar aur gaon — location & weight ke hisab se charges</span></div>
-        <div><RotateCcw size={20} strokeWidth={1.7} /><b>7-day easy returns</b><span>Faulty ya damaged item? Bina jhanjhat return</span></div>
+        <div><Truck size={20} strokeWidth={1.7} /><b>Pakistan-wide delivery</b><span>Every city and town — charges by location & weight</span></div>
+        <div><RotateCcw size={20} strokeWidth={1.7} /><b>7-day easy returns</b><span>Faulty or damaged item? Hassle-free return</span></div>
         <div><Wallet size={20} strokeWidth={1.7} /><b>Secure payments</b><span>COD, Raast/IBFT — JazzCash & Easypaisa coming</span></div>
-        <div><Coins size={20} strokeWidth={1.7} /><b>Wave Points rewards</b><span>Har delivered order par points, checkout par discount</span></div>
+        <div><Coins size={20} strokeWidth={1.7} /><b>Wave Points rewards</b><span>Points on every delivered order, discount at checkout</span></div>
       </section>
     </main>
   );

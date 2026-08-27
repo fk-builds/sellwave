@@ -109,7 +109,7 @@ export function ProductDetail() {
           {money(price)}
           {p.compareAtPrice && Number(p.compareAtPrice) > price && <s>{money(Number(p.compareAtPrice))}</s>}
         </strong>
-        <p className="lede">{p.shortDescription || 'Product information will be updated soon.'}</p>
+        <p className="lede">{p.shortDescription || 'Detailed information will be updated soon.'}</p>
 
         {variants.length > 0 && (
           <div className="variant-block">
@@ -122,7 +122,7 @@ export function ProductDetail() {
                   disabled={v.stockQuantity === 0}
                   onClick={() => { setVariantId(v.id); setQuantity(1); }}
                 >
-                  {v.name}{v.stockQuantity === 0 ? ' · out of stock' : ''}
+                  {v.name}{v.stockQuantity === 0 ? ' · — out of stock' : ''}
                 </button>
               ))}
             </div>
@@ -143,7 +143,7 @@ export function ProductDetail() {
           <button className="button ghost" onClick={wishlist}><Heart size={16} /> Save to wishlist</button>
         </div>
         {message && <p className={message.startsWith('Added') || message.startsWith('Saved') ? 'success' : 'error'}>{message}</p>}
-        <p className="minor">Secure checkout · COD, JazzCash & Easypaisa options at checkout</p>
+        <p className="minor">Secure checkout · COD, JazzCash & Easypaisa available at checkout</p>
         <Link className="text-link" to="/shop">← Continue shopping</Link>
       </section>
 
@@ -246,7 +246,7 @@ function BundleContents({ ids }: { ids: string[] }) {
       {items.map(x => (
         <p key={x.id}><span>{x.name}</span><b>{money(Number(x.price))}</b></p>
       ))}
-      <p><span><b>Combo price</b></span><b className="success">Save karein!</b></p>
+      <p><span><b>Combo price</b></span><b className="success">You save!</b></p>
     </div>
   );
 }

@@ -112,8 +112,8 @@ export function Checkout() {
               📦 {estimate.amount !== null
                 ? <>Delivery estimate ({estimate.zone}): <b>PKR {estimate.amount.toLocaleString()}</b> — order total me add ho jayega</>
                 : estimate.zone
-                  ? 'Delivery: is weight ke liye rate set nahi — call par confirm hoga'
-                  : 'Delivery: aapke city ka zone set nahi — call par confirm hoga'}
+                  ? 'Delivery: no rate set for this weight — will be confirmed by phone'
+                  : 'Delivery: no zone for your city yet — will be confirmed by phone'}
             </p>
           )}
 
@@ -146,7 +146,7 @@ export function Checkout() {
               <button className="button primary" onClick={() => order('BANK_TRANSFER', { paymentReference: reference || undefined })} disabled={busy}>
                 I have paid — place order
               </button>
-              <p className="minor">Order confirm hony ke baad receipt screenshot WhatsApp par bhej dein. Stock tab allocate hota hai jab payment verify ho jaye.</p>
+              <p className="minor">After confirming the order, send your receipt screenshot on WhatsApp. Stock is allocated once payment is verified.</p>
             </div>
           )}
 

@@ -143,7 +143,7 @@ export function Account() {
               {orders.map(o => <option value={o.id} key={o.id}>{o.orderNumber} · {new Date(o.createdAt).toLocaleDateString('en-PK')}</option>)}
             </select>
             <input required name="reason" maxLength={120} placeholder="Reason (e.g. item arrived damaged)" />
-            <textarea name="details" maxLength={1000} placeholder="Details (optional — help us resolve faster)" />
+            <textarea name="details" maxLength={1000} placeholder="Details (optional — helps us resolve faster)" />
             <button className="button primary">Submit return request</button>
             {returnMsg && <p className="minor">{returnMsg}</p>}
           </form>
@@ -180,7 +180,7 @@ export function Account() {
               <button className="button primary">Save changes</button>
               {profileMsg && <p className="minor">{profileMsg}</p>}
             </form>
-            <p className="minor">Email: {u.email} (sign-in identity — change karne ke liye WhatsApp support par rabta karein){u.createdAt ? ` · Member since ${new Date(u.createdAt).toLocaleDateString('en-PK')}` : ''}</p>
+            <p className="minor">Email: {u.email}{u.createdAt ? ` · Member since ${new Date(u.createdAt).toLocaleDateString('en-PK')}` : ''}</p>
           </div>
           <div className="profile-card">
             <h2>Change password</h2>
@@ -193,7 +193,7 @@ export function Account() {
           </div>
           <div className="profile-card">
             <h2>Session</h2>
-            <p className="minor">Apne account se sign out karein — khaas kar shared device par.</p>
+            <p className="minor">Sign out of your account — especially on shared devices.</p>
             <button className="button ghost" onClick={logout}><LogOut size={16} /> Sign out</button>
           </div>
         </section>

@@ -30,7 +30,7 @@ export function Track() {
   const mapObj = useRef<import('leaflet').Map | null>(null);
 
   useEffect(() => {
-    setSeo({ title: 'Track Order & Delivery Coverage — Sell Wave', description: 'Apne order ka status check karein aur dekhein Sell Wave Pakistan bhar kin cities me delivery karta hai.' });
+    setSeo({ title: 'Track Order & Delivery Coverage — Sell Wave', description: 'Check your order status and see all cities Sell Wave delivers to across Pakistan.' });
     apiCoverage();
   }, []);
 
@@ -73,7 +73,7 @@ export function Track() {
       const res = await fetch(`/api/track/${encodeURIComponent(num)}`);
       const d = await res.json();
       if (!res.ok) setError(d.message || 'Order nahi mila.'); else setInfo(d);
-    } catch { setError('Network masla — dobara koshish karein.'); }
+    } catch { setError('Network issue — please try again.'); }
     setBusy(false);
   }
 
@@ -84,12 +84,12 @@ export function Track() {
     <main className="page track-page">
       <p className="eyebrow">SELL WAVE</p>
       <h1>Track your order</h1>
-      <p className="lede">Order number daal kar apne parcel ki live position dekhein — ya neeche map par dekhein hum kin cities me delivery karte hain.</p>
+      <p className="lede">Enter your order number to see your parcel status — or check the map below to see all cities we deliver to.</p>
 
       <section className="track-panel">
         <form className="track-form" onSubmit={track}>
           <PackageSearch size={19} />
-          <input required name="orderNumber" placeholder="Order number: SW-17877…-123" maxLength={40} />
+          <input required name="orderNumber" placeholder="Order number e.g. SW-17877…-123" maxLength={40} />
           <button className="button primary" disabled={busy}>{busy ? 'Checking…' : 'Track'}</button>
         </form>
         {error && <p className="error">{error}</p>}
@@ -112,19 +112,19 @@ export function Track() {
               <span><Clock size={13} /> Order: {new Date(info.createdAt).toLocaleDateString('en-PK')}</span>
               <span><Truck size={13} /> {info.city ? `Delivering to: ${info.city}` : 'Delivery: Pakistan-wide'}</span>
               <span>Payment: {info.paymentMethod} · {info.paymentStatus}</span>
-              {info.status === 'SHIPPED' && <span className="success">Dispatch ho chuka hai — 1-3 din me pohanchna hai</span>}
+              {info.status === 'SHIPPED' && <span className="success">Shipped — arriving in 1-3 days</span>}
               {info.status !== 'DELIVERED' && info.status !== 'CANCELLED' && eta && step >= 0 && (
                 <span>Expected delivery: ~{eta.toLocaleDateString('en-PK')}</span>
               )}
-              {info.status === 'DELIVERED' && <span className="success">Deliver ho gaya — shukriya! 🎉</span>}
+              {info.status === 'DELIVERED' && <span className="success">Delivered — thank you! 🎉</span>}
             </div>
-            <p className="minor">Tafseel/return ke liye <a className="text-link" href={`/order/${info.orderNumber}`}>order page</a> kholein (account login zaroori).</p>
+            <p className="minor">For details/returns open the <a className="text-link" href={`/order/${info.orderNumber}`}>order page</a> page (account login required).</p>
           </div>
         )}
       </section>
 
-      <h2 className="faq-head"><MapPin size={19} /> Delivery coverage — Pakistan bhar</h2>
-      <p className="minor">Neeche wale shehron me hum delivery karte hain (gold pins map par). Apna city na dikhe? WhatsApp karein — arrangement ho sakta hai.</p>
+      <h2 className="faq-head"><MapPin size={19} /> Delivery coverage — all of Pakistan</h2>
+      <p className="minor">We deliver to the cities below (gold pins on the map). City not listed? Message us on WhatsApp — special arrangements are possible.</p>
 
       <div ref={mapRef} className="coverage-map" aria-label="Pakistan delivery coverage map" />
 
@@ -136,11 +136,11 @@ export function Track() {
             <div className="coverage-rates">
               {z.rates.length ? z.rates.map(rt => (
                 <p key={rt.name}><span>{rt.name}</span><b>PKR {Number(rt.amount).toLocaleString()}</b></p>
-              )) : <p className="minor">Rates on request — WhatsApp karein</p>}
+              )) : <p className="minor">Rates on request — message us</p>}
             </div>
           </article>
         ))}
-        {!zones.length && <p className="minor">Coverage info load ho rahi hai…</p>}
+        {!zones.length && <p className="minor">Loading coverage info…</p>}
       </div>
     </main>
   );

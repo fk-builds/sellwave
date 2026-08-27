@@ -63,8 +63,8 @@ export function Home() {
     const email = String(new FormData(e.currentTarget).get('email') || '');
     fetch('/api/settings/newsletter', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) })
       .then(r => r.json())
-      .then(() => setSubscribed('Shukriya! Aap deals ki list me shamil ho gaye.'))
-      .catch(() => setSubscribed('Kuch masla hua — dobara koshish karein.'));
+      .then(() => setSubscribed('Thank you! You have joined our deals list.'))
+      .catch(() => setSubscribed('Something went wrong — please try again.'));
   }
 
   if (!s) return <main />;
@@ -165,9 +165,9 @@ export function Home() {
       {/* ============ NEWSLETTER ============ */}
       <section className="newsletter">
         <h2>Join the Wave</h2>
-        <p>New arrivals, exclusive deals aur sale alerts — sab se pehle aapko.</p>
+        <p>New arrivals, exclusive deals and sale alerts — before anyone else.</p>
         <form onSubmit={subscribe}>
-          <input required type="email" name="email" maxLength={120} placeholder="Apna email address likhein" />
+          <input required type="email" name="email" maxLength={120} placeholder="Enter your email address" />
           <button className="button primary bright">Subscribe</button>
         </form>
         {subscribed && <p className="newsletter-ok">{subscribed}</p>}
