@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import { MessageCircle, RotateCcw } from 'lucide-react';
 import { Header } from './components/Header';
 import { Home } from './pages/Home';
@@ -59,9 +59,38 @@ export default function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="*" element={<Simple title="Page not found">The page you requested does not exist.</Simple>} />
       </Routes>
-      <footer>
-        <span>© {new Date().getFullYear()} Sell Wave. All rights reserved.</span>
-        <span>Pakistan-wide delivery · <a href={waLink(supportWhatsapp)} target="_blank" rel="noreferrer"><MessageCircle size={13} /> WhatsApp support</a> · <a href="/returns"><RotateCcw size={13} /> Returns & refunds</a> · <a href="/terms">Terms & privacy</a></span>
+      <footer className="lux-footer">
+        <div className="lux-footer-grid">
+          <div>
+            <span className="lux-footer-brand">SELL<span>WAVE</span></span>
+            <p>Pakistan ka trusted online mega store — electronics, fashion, beauty, home aur fitness, sab ek jagah. COD available, Pakistan-wide delivery.</p>
+          </div>
+          <div>
+            <b>Quick Links</b>
+            <Link to="/shop">Shop</Link>
+            <Link to="/about">About us</Link>
+            <Link to="/support">Support</Link>
+            <Link to="/account">Track my orders</Link>
+          </div>
+          <div>
+            <b>Customer Service</b>
+            <Link to="/returns">Returns & refunds</Link>
+            <Link to="/terms">Terms & privacy</Link>
+            <Link to="/support">FAQs</Link>
+            <Link to="/account">My account</Link>
+          </div>
+          <div>
+            <b>Contact</b>
+            <a href={waLink(supportWhatsapp)} target="_blank" rel="noreferrer"><MessageCircle size={13} /> WhatsApp: 0311 9579613</a>
+            <a href="mailto:sellwave04@gmail.com">sellwave04@gmail.com</a>
+            <span>Mon–Sun · 24/7 messaging</span>
+            <span className="lux-pay">COD · Bank Transfer · Raast · JazzCash (soon)</span>
+          </div>
+        </div>
+        <div className="lux-footer-bottom">
+          <span>© {new Date().getFullYear()} Sell Wave. All rights reserved.</span>
+          <span>Pakistan-wide delivery</span>
+        </div>
       </footer>
       <a
         className="whatsapp-float"

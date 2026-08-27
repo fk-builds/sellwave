@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { PackageSearch } from 'lucide-react';
+import { ProductCard } from '../components/ProductCard';
 import { setSeo } from '../lib/seo';
 import { api, Product, money } from '../lib/api';
 
@@ -11,6 +12,7 @@ export function Shop() {
   const [items, setItems] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sort, setSort] = useState('newest');
   const [error, setError] = useState('');
   const query = params.get('q') || '';
   const category = params.get('category') || '';
@@ -43,6 +45,12 @@ export function Shop() {
       <form className="shop-search" onSubmit={search}>
         <input name="q" defaultValue={query} placeholder="Search products" />
         <button className="button primary">Search</button>
+        <select value={sort} onChange={e => setSort(e.target.value)} className="sort-select" aria-label="Sort products">
+          <option value="newest">Newest first</option>
+          <option value="price-asc">Price: low → high</option>
+          <option value="price-desc">Price: high → low</option>
+          <option value="name">Name A–Z</option>
+        </select>
       </form>
       <div className="chips">
         <button className={!category && !featured ? 'selected' : ''} onClick={() => setParams(x => { x.delete('category'); x.delete('featured'); return x; })}>All</button>
@@ -60,19 +68,13 @@ export function Shop() {
             <p>{query || category || featured ? 'Try a different search or category.' : 'There are no public products yet. Please check back soon.'}</p>
           </section>
         ) : (
-          <div className="grid">
-            {items.map(p => (
-              <Link className="product" to={`/product/${p.slug}`} key={p.id}>
-                {p.images[0] ? <img src={p.images[0].url} alt={p.images[0].alt || p.name} loading="lazy" /> : <div className="product-image">SELL WAVE</div>}
-                <small>{p.category.name}</small>
-                <h3>{p.name}</h3>
-                <strong>
-                  {money(Number(p.price))}
-                  {p.compareAtPrice && Number(p.compareAtPrice) > Number(p.price) && <s>{money(Number(p.compareAtPrice))}</s>}
-                </strong>
-                {p.stockQuantity === 0 && !(p.variants && p.variants.some(v => v.stockQuantity > 0)) && <span className="badge draft">Out of stock</span>}
-              </Link>
-            ))}
+          <div className="pgrid">
+            {[...items].sort((a, b) =>
+              sort === 'price-asc' ? Number(a.price) - Number(b.price)
+              : sort === 'price-desc' ? Number(b.price) - Number(a.price)
+              : sort === 'name' ? a.name.localeCompare(b.name)
+              : 0
+            ).map(p => <ProductCard key={p.id} p={p} />)}
           </div>
         )}
     </main>

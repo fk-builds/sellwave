@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Search, ShoppingBag, Heart, Menu, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useStore, waLink } from '../lib/store';
 
 export function Header() {
@@ -8,6 +9,7 @@ export function Header() {
   const [hi, setHi] = useState(0);
   const [open, setOpen] = useState(false);
   const { supportWhatsapp } = useStore();
+  const nav = useNavigate();
 
   useEffect(() => {
     if ((headlines?.length ?? 0) <= 1) return;
@@ -41,6 +43,17 @@ export function Header() {
           <img className="mark" src="/brand/sellwave-mark.png" alt="" />
           <img className="wordmark" src="/brand/sellwave-wordmark.png" alt="Sell Wave" />
         </Link>
+        <form
+          className="header-search"
+          onSubmit={(e: FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            const q = String(new FormData(e.currentTarget).get('q') || '').trim();
+            nav(q ? `/shop?q=${encodeURIComponent(q)}` : '/shop');
+          }}
+        >
+          <input name="q" placeholder="Search products… (earbuds, watch, serum)" aria-label="Search products" />
+          <button aria-label="Search"><Search size={17} /></button>
+        </form>
         <nav className="desktop-nav">
           <NavLink to="/shop">Shop</NavLink>
           <NavLink to="/about">About</NavLink>
