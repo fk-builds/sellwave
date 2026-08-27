@@ -46,11 +46,12 @@ r.patch('/profile', async (req, res, next) => {
       firstName: z.string().min(1).max(50),
       lastName: z.string().min(1).max(50),
       phone: z.string().min(7).max(20).optional(),
+      city: z.string().max(60).optional(),
     }).parse(req.body);
     const user = await prisma.user.update({
       where: { id: req.auth!.id },
       data: d,
-      select: { id: true, email: true, firstName: true, lastName: true, phone: true, role: true },
+      select: { id: true, email: true, firstName: true, lastName: true, phone: true, city: true, role: true },
     });
     res.json({ user });
   } catch (e) { next(e); }

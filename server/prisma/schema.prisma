@@ -43,6 +43,7 @@ model User {
  firstName String
  lastName String
  phone String?
+ city String?
  role Role @default(CUSTOMER)
  isActive Boolean @default(true)
  emailVerifiedAt DateTime?
