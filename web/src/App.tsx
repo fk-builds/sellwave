@@ -67,7 +67,7 @@ export default function App() {
         <div className="lux-footer-grid">
           <div>
             <span className="lux-footer-brand">SELL<span>WAVE</span></span>
-            <p>Pakistan ka trusted online mega store — electronics, fashion, beauty, home aur fitness, sab ek jagah. COD available, Pakistan-wide delivery.</p>
+            <p>Pakistan’s trusted online mega store — electronics, fashion, beauty, home & fitness, all in one place. COD available, Pakistan-wide delivery.</p>
           </div>
           <div>
             <b>Quick Links</b>
@@ -93,7 +93,7 @@ export default function App() {
         </div>
         <div className="lux-footer-bottom">
           <span>© {new Date().getFullYear()} Sell Wave. All rights reserved.</span>
-          <span>Pakistan-wide delivery</span>
+          <span>Pakistan-wide delivery across the country</span>
         </div>
       </footer>
       <a
