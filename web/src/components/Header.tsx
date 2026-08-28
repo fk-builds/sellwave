@@ -104,7 +104,7 @@ export function Header() {
               </>
             )}
           </div>
-          <Link className="bag" to="/cart"><ShoppingBag size={19} /> Cart</Link>
+          <Link className="bag" to="/cart" aria-label="Cart"><ShoppingBag size={19} /></Link>
           <button className="mobile-menu" aria-label="Open navigation" onClick={() => setOpen(true)}><Menu /></button>
         </div>
       </header>
