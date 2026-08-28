@@ -5,7 +5,8 @@ import { UploadField } from '../components/UploadField';
 import { OpsPanel } from './OpsPanel';
 import { PricingAgentPanel } from './PricingAgentPanel';
 import { SettingsPanel } from './SettingsPanel';
-import { LayoutDashboard, Package, ShoppingCart, TicketPercent, Star, RotateCcw, Truck, Settings as SettingsIcon, Users, Clock, Bot, Calculator } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, TicketPercent, Star, RotateCcw, Truck, Settings as SettingsIcon, Users, Clock, Bot, Calculator, DollarSign } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 type Dashboard = { products: number; orders: number; customers: number; pendingOrders: number; pendingReviews: number; pendingReturns: number };
 type Category = { id: string; name: string; slug: string };
@@ -93,31 +94,80 @@ export function Admin() {
 
   return (
     <main className="page admin">
-      <p className="eyebrow">STORE ADMINISTRATION</p>
-      <h1>Operations</h1>
-      {message && <p className="error">{message}</p>}
+      <div className="admin-topbar">
+        <Link to="/" className="text-link">← Back to store</Link>
+        <span className="admin-topbar-title">Sell Wave Admin</span>
+      </div>
 
-      <nav className="tabs">
+      <div className="admin-shell">
+      <aside className="admin-side">
         {TABS.map(t => {
           const Icon = TAB_ICONS[t];
+          const badge = t === 'Reviews' && data?.pendingReviews ? data.pendingReviews : t === 'Returns' && data?.pendingReturns ? data.pendingReturns : null;
           return (
             <button key={t} className={tab === t ? 'on' : ''} onClick={() => { setTab(t); setMessage(''); }}>
-              <Icon size={15} /> {t}{t === 'Reviews' && data?.pendingReviews ? ` · ${data.pendingReviews}` : ''}{t === 'Returns' && data?.pendingReturns ? ` · ${data.pendingReturns}` : ''}
+              <Icon size={16} />
+              <span className="admin-side-label">{t}</span>
+              {badge ? <span className="admin-side-badge">{badge}</span> : null}
             </button>
           );
         })}
-      </nav>
+      </aside>
+
+      <div className="admin-main">
+      {message && <p className="error">{message}</p>}
 
       {tab === 'AI Ops' && <OpsPanel />}
       {tab === 'Pricing AI' && <PricingAgentPanel />}
 
-      {tab === 'Overview' && data && (
-        <div className="metrics">
-          {([[Package, 'Products', data.products], [ShoppingCart, 'Orders', data.orders], [Users, 'Customers', data.customers], [Clock, 'Pending orders', data.pendingOrders], [Star, 'Pending reviews', data.pendingReviews], [RotateCcw, 'Open returns', data.pendingReturns]] as const).map(([Icon, label, value]) => (
-            <div key={label}><Icon size={19} strokeWidth={1.7} /><b>{value}</b><span>{label}</span></div>
-          ))}
-        </div>
-      )}
+      {tab === 'Overview' && data && (() => {
+        const revenue = orders.reduce((s, o) => s + Number(o.totalAmount), 0);
+        const recent = orders.slice(0, 6);
+        return (
+          <>
+            <div className="admin-dash-grid">
+              <div className="admin-stat"><DollarSign size={20} strokeWidth={1.7} /><b>PKR {revenue.toLocaleString()}</b><span>Total Revenue</span></div>
+              <div className="admin-stat"><ShoppingCart size={20} strokeWidth={1.7} /><b>{data.orders}</b><span>Total Orders{data.pendingOrders ? ` · ${data.pendingOrders} pending` : ''}</span></div>
+              <div className="admin-stat"><Package size={20} strokeWidth={1.7} /><b>{data.products}</b><span>Total Products</span></div>
+              <div className="admin-stat"><Users size={20} strokeWidth={1.7} /><b>{data.customers}</b><span>Customers</span></div>
+            </div>
+
+            <section className="dash-card wide">
+              <div className="dash-card-head">
+                <h2>Recent Orders</h2>
+                <button className="text-link" onClick={() => setTab('Orders')}>View All →</button>
+              </div>
+              {recent.length ? (
+                <div className="dash-orders">
+                  {recent.map(o => (
+                    <div className="dash-order-row" key={o.id}>
+                      <div>
+                        <b>{o.orderNumber}</b>
+                        <small>{o.user.firstName} {o.user.lastName} · {new Date(o.createdAt).toLocaleDateString('en-PK')}</small>
+                      </div>
+                      <span className={`badge ${o.status.toLowerCase()}`}>{o.status}</span>
+                      <strong>PKR {Number(o.totalAmount).toLocaleString()}</strong>
+                    </div>
+                  ))}
+                </div>
+              ) : <p className="minor">No orders yet.</p>}
+            </section>
+
+            <section className="dash-card wide">
+              <div className="dash-card-head"><h2>Quick Actions</h2></div>
+              <div className="admin-quick">
+                <button onClick={() => setTab('Catalog')}><Package size={18} /> Manage Products</button>
+                <button onClick={() => setTab('Orders')}><ShoppingCart size={18} /> View Orders</button>
+                <button onClick={() => setTab('Shipping')}><Truck size={18} /> Shipping Zones</button>
+                <button onClick={() => setTab('Settings')}><SettingsIcon size={18} /> Store Settings</button>
+              </div>
+              <div className="rowline" style={{ marginTop: 12 }}>
+                <small className="minor">Pending: {data.pendingOrders} orders · {data.pendingReviews} reviews · {data.pendingReturns} returns</small>
+              </div>
+            </section>
+          </>
+        );
+      })()}
 
       {tab === 'Catalog' && (
         <>
@@ -437,6 +487,8 @@ export function Admin() {
         </>
       )}
       {tab === 'Settings' && <SettingsPanel />}
+      </div>
+      </div>
     </main>
   );
 }
