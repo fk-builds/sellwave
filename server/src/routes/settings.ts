@@ -25,6 +25,12 @@ r.get('/store', async (_req, res) => {
     slides: Array.isArray(value.slides) && value.slides.length
       ? value.slides
       : (Array.isArray(slidesSetting?.value) ? slidesSetting.value : []),
+    payments: {
+      cod: true,
+      bankTransfer: Boolean((value.bank as { iban?: string } | null)?.iban),
+      jazzcash: Boolean((value.payments as { jazzcash?: { enabled?: boolean } } | null)?.jazzcash?.enabled),
+      easypaisa: Boolean((value.payments as { easypaisa?: { enabled?: boolean } } | null)?.easypaisa?.enabled),
+    },
   });
 });
 

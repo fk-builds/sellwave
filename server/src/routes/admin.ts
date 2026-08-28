@@ -304,9 +304,49 @@ r.patch('/settings', async (req, res, next) => {
       supportEmail: z.string().email().optional(),
       headlines: z.array(z.string().min(1).max(170)).max(10).optional(),
       slides: z.array(slide).min(1).max(12).optional(),
+      courier: z.object({
+        provider: z.string().max(40).optional(),
+        enabled: z.boolean().optional(),
+        environment: z.enum(['sandbox', 'production']).optional(),
+        apiUrl: z.string().max(200).optional(),
+        apiKey: z.string().max(200).optional(),
+        apiSecret: z.string().max(200).optional(),
+        clientId: z.string().max(120).optional(),
+        clientSecret: z.string().max(200).optional(),
+        accountCode: z.string().max(60).optional(),
+        pickupCity: z.string().max(60).optional(),
+        defaultCharges: z.coerce.number().min(0).optional(),
+        notes: z.string().max(500).optional(),
+      }).optional(),
+      payments: z.object({
+        jazzcash: z.object({
+          enabled: z.boolean().optional(),
+          environment: z.enum(['sandbox', 'production']).optional(),
+          merchantId: z.string().max(60).optional(),
+          password: z.string().max(120).optional(),
+          integritySalt: z.string().max(120).optional(),
+          returnUrl: z.string().max(200).optional(),
+        }).optional(),
+        easypaisa: z.object({
+          enabled: z.boolean().optional(),
+          environment: z.enum(['sandbox', 'production']).optional(),
+          storeId: z.string().max(60).optional(),
+          hashKey: z.string().max(160).optional(),
+          returnUrl: z.string().max(200).optional(),
+        }).optional(),
+      }).optional(),
     }).parse(req.body);
     const current = await prisma.siteSetting.findUnique({ where: { key: 'store' } });
-    const value = { ...(current?.value as Record<string, unknown> | null ?? {}), ...Object.fromEntries(Object.entries(d).filter(([, v]) => v !== undefined)) };
+    const prev = (current?.value ?? {}) as Record<string, unknown>;
+    const value: Record<string, unknown> = { ...prev };
+    for (const [k, v] of Object.entries(d)) {
+      if (v === undefined) continue;
+      if (k === 'courier' || k === 'payments' || k === 'bank') {
+        value[k] = { ...((prev[k] as Record<string, unknown>) ?? {}), ...(v as Record<string, unknown>) };
+      } else {
+        value[k] = v;
+      }
+    }
     const saved = await prisma.siteSetting.upsert({ where: { key: 'store' }, update: { value: value as Prisma.InputJsonValue }, create: { key: 'store', value: value as Prisma.InputJsonValue } });
     await audit(req.auth!.id, 'UPDATE', 'SiteSetting', 'store', d);
     res.json(saved.value);

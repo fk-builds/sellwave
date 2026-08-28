@@ -166,7 +166,7 @@ export function Admin() {
                   <UploadField label="Upload main photo" onUploaded={(url) => setUploadedProductImage(url)} />
                   {uploadedProductImage && <img src={uploadedProductImage} alt="" style={{ width: 46, height: 46, objectFit: 'cover' }} />}
                 </div>
-                <input type="url" name="imageUrl" placeholder="…ya image URL paste karein (optional)" />
+                <input type="url" name="imageUrl" placeholder="…or paste an image URL (optional)" />
                 <textarea name="shortDescription" placeholder="Short description" />
                 <input name="seoTitle" placeholder="SEO title (optional)" />
                 <textarea name="seoDescription" placeholder="SEO description (optional)" />
@@ -274,7 +274,7 @@ export function Admin() {
                     </select>
                   </div>
                   {o.needsVerification && o.riskFlags.length > 0 && (
-                    <small className="minor risk-note">AI Risk Guard: {o.riskFlags.join(' · ')} — dispatch se pehle customer verify karein (call/WhatsApp).</small>
+                    <small className="minor risk-note">AI Risk Guard: {o.riskFlags.join(' · ')} — verify the customer (call/WhatsApp) before dispatch.</small>
                   )}
                   {o.paymentMethod === 'COD' && o.status === 'PENDING' && !o.needsVerification && (
                     <small className="minor">COD: confirm this order by call or WhatsApp at your discretion before processing.</small>

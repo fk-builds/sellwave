@@ -91,7 +91,7 @@ export function PricingAgentPanel() {
             <ScanSearch size={15} /> Run master pricing scan
           </button>
         </div>
-        <p className="minor">Cost price aur market rate (Daraz/local store) likhein, phir scan chalayein — har product ke liye approval draft banega. Anchor visual ke liye market rate crossed-out dikhega.</p>
+        <p className="minor">Enter the cost price and market rate (Daraz/local store), then run a scan — an approval draft is created for each product. The market rate shows crossed-out as the anchor price.</p>
         <div className="table">
           {plans.map(pl => (
             <article key={pl.id} className="stack">
@@ -122,14 +122,14 @@ export function PricingAgentPanel() {
               )}
             </article>
           ))}
-          {!plans.length && <p className="minor">Pehle products banayein.</p>}
+          {!plans.length && <p className="minor">Pehle products create.</p>}
         </div>
       </section>
 
       {/* ---------- Bundles ---------- */}
       <section className="admin-table" style={{ marginTop: 0 }}>
         <h2><Boxes size={19} /> Smart bundle generator <small className="minor">(low-value items se 2-item combos — draft approval banta hai)</small></h2>
-        <button className="button primary" onClick={() => act(() => api('/admin/pricing-agent/bundle-suggestions', { method: 'POST' }), 'Bundle drafts ready — AI Ops → Approvals me approve karein.')}>
+        <button className="button primary" onClick={() => act(() => api('/admin/pricing-agent/bundle-suggestions', { method: 'POST' }), 'Bundle drafts ready — approve them in AI Ops → Approvals.')}>
           <Boxes size={15} /> Generate bundle suggestions
         </button>
         <p className="minor">Approve hone par combo product khud ban kar live ho jata hai (components ki list description me, stock = sab se kam component stock).</p>

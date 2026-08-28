@@ -69,7 +69,7 @@ export function OpsPanel() {
   }
 
   const draftPricing = (s: PriceSuggestion) =>
-    act(() => api('/admin/ops/pricing-approval', { method: 'POST', body: JSON.stringify({ productId: s.productId, newPrice: s.suggestedPrice, reason: s.reason }) }), 'Approval draft ban gayi — feed me Approve karein.');
+    act(() => api('/admin/ops/pricing-approval', { method: 'POST', body: JSON.stringify({ productId: s.productId, newPrice: s.suggestedPrice, reason: s.reason }) }), 'Approval draft created — Approve it in the feed.');
 
   return (
     <main style={{ display: 'grid', gap: 26 }}>
@@ -136,7 +136,7 @@ export function OpsPanel() {
             <div><b>{s.name}</b><small>{s.reason}</small></div>
             <div className="inline">
               <span>PKR {s.currentPrice.toLocaleString()} → <b>PKR {s.suggestedPrice.toLocaleString()}</b></span>
-              <button className="button ghost" onClick={() => draftPricing(s)}>Draft approval banayein</button>
+              <button className="button ghost" onClick={() => draftPricing(s)}>Create approval draft</button>
             </div>
           </article>
         ))}
@@ -145,7 +145,7 @@ export function OpsPanel() {
             <div><b>{s.name}</b><small>{s.reason}</small></div>
             <div className="inline">
               <span>PKR {s.currentPrice.toLocaleString()} → <b>PKR {s.suggestedPrice.toLocaleString()}</b></span>
-              <button className="button ghost" onClick={() => draftPricing(s)}>Draft approval banayein</button>
+              <button className="button ghost" onClick={() => draftPricing(s)}>Create approval draft</button>
             </div>
           </article>
         ))}
@@ -155,7 +155,7 @@ export function OpsPanel() {
       <section className="admin-table" style={{ marginTop: 0 }}>
         <div className="rowline">
           <h2 style={{ margin: 0 }}>Restock agent — low stock & purchase orders</h2>
-          <button className="button ghost" onClick={() => act(() => api('/admin/ops/run-checks', { method: 'POST' }), 'Stock check chal gaya.')}><RefreshCw size={15} /> Run stock check</button>
+          <button className="button ghost" onClick={() => act(() => api('/admin/ops/run-checks', { method: 'POST' }), 'Stock check completed.')}><RefreshCw size={15} /> Run stock check</button>
         </div>
         {lowstock.length ? (
           <div className="table">
@@ -234,7 +234,7 @@ export function OpsPanel() {
             </label>
             <label className="minor" style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 22 }}>
               <input type="checkbox" name="autoHighlightPositiveReviews" defaultChecked={settings.autoHighlightPositiveReviews} />
-              Positive reviews ko highlight karein
+              Highlight positive reviews
             </label>
             <button className="button primary" style={{ justifySelf: 'start' }}>Save automation settings</button>
           </form>

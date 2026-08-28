@@ -11,7 +11,7 @@ export function UploadField({ onUploaded, label = 'Upload photo' }: { onUploaded
   async function handle(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
-    if (f.size > 3_000_000) { setMsg('Image 3MB se choti honi chahiye — tinypng.com par compress karein.'); return; }
+    if (f.size > 3_000_000) { setMsg('Image must be under 3MB — compress it at tinypng.com first.'); return; }
     setBusy(true); setMsg('');
     const reader = new FileReader();
     reader.onload = async () => {

@@ -10,6 +10,7 @@ type Bank = {
   accountTitle?: string; bankName?: string; accountNumber?: string;
   iban?: string; raastNumber?: string; instructions?: string;
 };
+type Payments = { cod?: boolean; bankTransfer?: boolean; jazzcash?: boolean; easypaisa?: boolean };
 
 export function Checkout() {
   const [addresses, setAddresses] = useState<A[]>([]);
@@ -18,6 +19,7 @@ export function Checkout() {
   const [points, setPoints] = useState<number>(0);
   const [balance, setBalance] = useState<number | null>(null);
   const [bank, setBank] = useState<Bank | null>(null);
+  const [pay, setPay] = useState<Payments>({ cod: true, bankTransfer: false, jazzcash: false, easypaisa: false });
   const [bankOpen, setBankOpen] = useState(false);
   const [reference, setReference] = useState('');
   const [estimate, setEstimate] = useState<Estimate | null>(null);
@@ -30,7 +32,7 @@ export function Checkout() {
       .then(x => { setAddresses(x); setSelected(x[0]?.id || ''); })
       .catch(e => setMessage(e.message));
     api<Loyalty>('/account/loyalty').then(l => setBalance(l.points)).catch(() => setBalance(null));
-    api<{ bank: Bank | null }>('/settings/store').then(s => setBank(s.bank)).catch(() => {});
+    api<{ bank: Bank | null; payments?: Payments }>('/settings/store').then(s => { setBank(s.bank); if (s.payments) setPay(s.payments); }).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -120,11 +122,19 @@ export function Checkout() {
           <h2 className="iconed"><Wallet size={19} /> Choose payment</h2>
           <div className="payment-buttons">
             <button className="button primary" onClick={() => order('COD')} disabled={busy}><Banknote size={17} /> Cash on delivery</button>
-            {bankReady && (
+            {pay.bankTransfer && bankReady && (
               <button className="button ghost" onClick={() => setBankOpen(o => !o)}><Landmark size={17} /> Bank transfer / Raast</button>
             )}
-            <button className="button ghost" onClick={() => setMessage('JazzCash will be enabled after merchant credentials are configured.')}><Smartphone size={17} /> JazzCash</button>
-            <button className="button ghost" onClick={() => setMessage('Easypaisa will be enabled after merchant credentials are configured.')}><Smartphone size={17} /> Easypaisa</button>
+            {pay.jazzcash ? (
+              <button className="button ghost" onClick={() => setMessage('JazzCash online payment is being activated — use COD or Bank transfer for now.')}><Smartphone size={17} /> JazzCash</button>
+            ) : (
+              <button className="button ghost" onClick={() => setMessage('JazzCash will be enabled once merchant credentials are configured.')}><Smartphone size={17} /> JazzCash (soon)</button>
+            )}
+            {pay.easypaisa ? (
+              <button className="button ghost" onClick={() => setMessage('Easypaisa online payment is being activated — use COD or Bank transfer for now.')}><Smartphone size={17} /> Easypaisa</button>
+            ) : (
+              <button className="button ghost" onClick={() => setMessage('Easypaisa will be enabled once merchant credentials are configured.')}><Smartphone size={17} /> Easypaisa (soon)</button>
+            )}
           </div>
 
           {bankOpen && bank && (
