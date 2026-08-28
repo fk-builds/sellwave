@@ -492,3 +492,17 @@ footer a{display:inline-flex;align-items:center;gap:5px}
 .referral-code{background:rgba(255,255,255,.16);border:1px dashed rgba(255,255,255,.5);padding:14px;font-size:22px;font-weight:800;letter-spacing:.12em;text-align:center}
 .referral-copy{background:#fff;color:#0e7a4f;border:0;padding:12px;font-weight:800;font-size:13px;cursor:pointer}
 @media(max-width:900px){.dash-stats{grid-template-columns:repeat(2,1fr)}.dash-hero{flex-direction:column;align-items:flex-start}}
+
+/* ---------- Footer brand image ---------- */
+img.lux-footer-brand{height:26px;width:auto;margin-bottom:12px;display:block}
+
+/* ---------- Mobile drawer: WHITE simple + tight spacing ---------- */
+.mobile-nav{background:#fff;width:min(300px,84vw);padding:18px 20px}
+.mobile-close{color:var(--ink);top:14px;right:12px}
+.mobile-nav-brand{height:22px;width:auto;margin:0 0 8px}
+.mobile-nav-user{color:var(--gold-deep);font-size:12px;margin-bottom:4px}
+.mobile-nav-links{gap:0}
+.mobile-nav-links a{color:var(--ink);font-size:15px;font-weight:700;padding:9px 2px;border-bottom:1px solid #eef0f4}
+.mobile-nav-links a.active{color:var(--gold-deep)}
+.mobile-nav-links a:hover{background:#faf6ec}
+.mobile-logout{padding:9px 2px;font-size:14px;color:#b42318}

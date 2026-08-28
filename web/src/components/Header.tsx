@@ -111,7 +111,7 @@ export function Header() {
 
       <div className={`mobile-nav ${open ? 'open' : ''}`}>
         <button className="mobile-close" aria-label="Close navigation" onClick={() => setOpen(false)}><X size={26} /></button>
-        <span className="mobile-nav-brand">SELL<span>WAVE</span></span>
+        <img className="mobile-nav-brand" src="/brand/sellwave-wordmark.png" alt="Sell Wave" />
         {user && <span className="mobile-nav-user">Hi, {user.firstName}</span>}
         <nav className="mobile-nav-links">
           <NavLink to="/shop" onClick={() => setOpen(false)}>Shop</NavLink>

@@ -66,7 +66,7 @@ export default function App() {
       <footer className="lux-footer">
         <div className="lux-footer-grid">
           <div>
-            <span className="lux-footer-brand">SELL<span>WAVE</span></span>
+            <img className="lux-footer-brand" src="/brand/sellwave-wordmark-white.png" alt="Sell Wave" />
             <p>Pakistan’s trusted online mega store — electronics, fashion, beauty, home & fitness, all in one place. COD available, Pakistan-wide delivery.</p>
           </div>
           <div>
