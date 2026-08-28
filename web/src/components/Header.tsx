@@ -38,7 +38,9 @@ export function Header() {
 
   return (
     <>
-      <div className="topbar" key={hi}>{line}</div>
+      <div className="topbar" key={hi}>
+        <div className="topbar-track"><span className="topbar-item">{line}</span><span className="topbar-item" aria-hidden="true">{line}</span></div>
+      </div>
       <header>
         <Link className="brand" to="/" aria-label="Sell Wave home">
           <img className="mark" src="/brand/sellwave-mark.png" alt="" />
