@@ -44,6 +44,9 @@ model User {
  lastName String
  phone String?
  city String?
+ googleId String? @unique
+ otpCode String?
+ otpExpiresAt DateTime?
  role Role @default(CUSTOMER)
  isActive Boolean @default(true)
  emailVerifiedAt DateTime?
