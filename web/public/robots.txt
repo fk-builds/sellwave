@@ -4,4 +4,4 @@ Disallow: /admin
 Disallow: /account
 Disallow: /checkout
 
-Sitemap: https://sellwave.pk/api/sitemap.xml
+Sitemap: https://sellwave-roan.vercel.app/api/sitemap.xml
