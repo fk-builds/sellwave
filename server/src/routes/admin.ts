@@ -72,7 +72,7 @@ r.post('/categories', async (req, res, next) => {
 // ---------- Products ----------
 r.get('/products', async (_q, res) =>
   res.json(await prisma.product.findMany({
-    include: { category: true, images: { orderBy: { sortOrder: 'asc' } }, variants: { orderBy: { sortOrder: 'asc' } } },
+    include: { category: true, images: { orderBy: { sortOrder: 'asc' } }, videos: { orderBy: { sortOrder: 'asc' } }, variants: { orderBy: { sortOrder: 'asc' } } },
     orderBy: { updatedAt: 'desc' },
   })),
 );

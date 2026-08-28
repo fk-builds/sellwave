@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { api } from '../lib/api';
 import { Auth } from './Auth';
 import { UploadField } from '../components/UploadField';
@@ -12,10 +12,11 @@ type Dashboard = { products: number; orders: number; customers: number; pendingO
 type Category = { id: string; name: string; slug: string };
 type Variant = { id: string; name: string; sku?: string | null; price?: string | null; stockQuantity: number; isActive: boolean };
 type Image = { id: string; url: string; alt?: string | null; sortOrder: number };
+type Video = { id: string; kind: 'upload' | 'embed'; url: string; thumbnailUrl?: string | null; sortOrder: number };
 type Product = {
   id: string; name: string; sku: string; price: string; stockQuantity: number;
   status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED'; isFeatured: boolean; category: Category;
-  images: Image[]; variants: Variant[];
+  images: Image[]; videos: Video[]; variants: Variant[];
 };
 type Order = {
   id: string; orderNumber: string; status: string; paymentMethod: string; paymentStatus: string;
@@ -269,6 +270,23 @@ export function Admin() {
                           <button className="button primary">Add image</button>
                         </form>
 
+                        <h3>Videos</h3>
+                        <div className="thumbs">
+                          {p.videos.map(v => (
+                            <div key={v.id}>
+                              {v.thumbnailUrl ? <img src={v.thumbnailUrl} alt="" style={{ width: 72, height: 72, objectFit: 'cover' }} /> : <div style={{ width: 72, height: 72, background: '#0c1420', color: '#fff', display: 'grid', placeItems: 'center' }}>▶</div>}
+                              <small className="minor">{v.kind === 'embed' ? 'Embed' : 'File'}</small>
+                              <button className="text-button" onClick={() => act(() => api(`/admin/products/${p.id}/videos/${v.id}`, { method: 'DELETE' }))}>Remove</button>
+                            </div>
+                          ))}
+                          {!p.videos.length && <small className="minor">No videos yet.</small>}
+                        </div>
+                        <form className="inline" onSubmit={(e: FormEvent<HTMLFormElement>) => { e.preventDefault(); const d = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>; act(() => api(`/admin/products/${p.id}/videos`, { method: 'POST', body: JSON.stringify({ kind: 'embed', url: d.url }) })); e.currentTarget.reset(); }}>
+                          <input required type="url" name="url" placeholder="YouTube / Shorts / Vimeo / TikTok link" style={{ minWidth: 240 }} />
+                          <button className="button ghost">Add embed video</button>
+                        </form>
+                        <VideoUpload productId={p.id} onDone={() => act(async () => {}, 'Video uploaded.')} />
+
                         <h3>Options (size / colour with own stock)</h3>
                         <div className="table">
                           {p.variants.map(v => (
@@ -494,5 +512,47 @@ export function Admin() {
       </div>
       </div>
     </main>
+  );
+}
+
+
+function VideoUpload({ productId, onDone }: { productId: string; onDone: () => void }) {
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState('');
+  const ref = useRef<HTMLInputElement>(null);
+
+  async function handle(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (!/\.(mp4|webm)$/i.test(f.name)) { setMsg('Only .mp4 or .webm allowed.'); return; }
+    if (f.size > 50 * 1024 * 1024) { setMsg('Max 50MB.'); return; }
+    setBusy(true); setMsg('Uploading…');
+    try {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const rd = new FileReader();
+        rd.onload = () => resolve(String(rd.result));
+        rd.onerror = () => reject(new Error('read failed'));
+        rd.readAsDataURL(f);
+      });
+      const res = await fetch(`/api/admin/media/video?productId=${productId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: f.name, data: dataUrl }),
+      });
+      const j = await res.json();
+      if (!res.ok) throw new Error(j.message || 'Upload failed');
+      setMsg('Uploaded ✓');
+      onDone();
+    } catch (e) { setMsg(e instanceof Error ? e.message : 'Upload failed'); }
+    setBusy(false);
+    if (ref.current) ref.current.value = '';
+  }
+
+  return (
+    <span className="inline">
+      <input ref={ref} type="file" accept="video/mp4,video/webm" style={{ display: 'none' }} onChange={handle} />
+      <button type="button" className="button ghost" disabled={busy} onClick={() => ref.current?.click()}>{busy ? 'Uploading…' : 'Upload video file (.mp4/.webm, max 50MB)'}</button>
+      {msg && <small className="minor">{msg}</small>}
+    </span>
   );
 }
