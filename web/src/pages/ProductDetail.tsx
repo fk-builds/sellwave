@@ -13,6 +13,7 @@ export function ProductDetail() {
   const [variantId, setVariantId] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
   const [related, setRelated] = useState<Product[]>([]);
+  const [activeMedia, setActiveMedia] = useState(0);
   const [rating, setRating] = useState(5);
   const [reviewBody, setReviewBody] = useState('');
   const [reviewMessage, setReviewMessage] = useState('');
@@ -41,7 +42,44 @@ export function ProductDetail() {
       .catch(e => setError(e.message));
   }, [slug]);
 
-  const gallery = useMemo(() => p?.images ?? [], [p]);
+
+  // Pause video whenever the active media tab changes
+  useEffect(() => {
+    const el = document.querySelector('.gallery video') as HTMLVideoElement | null;
+    el?.pause();
+  }, [activeMedia]);
+
+  const media = useMemo(() => {
+    const imgs = (p?.images ?? []).map(img => ({ type: 'image' as const, url: img.url, thumb: img.url, alt: img.alt }));
+    const vids = (p?.videos ?? []).map(v => {
+      let embed = '';
+      let thumb = v.thumbnailUrl ?? '';
+      if (v.kind === 'embed') {
+        const yt = v.url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/);
+        const vimeo = v.url.match(/vimeo\.com\/(\d+)/);
+        const tiktok = v.url.match(/tiktok\.com\/@[\w.]+\/video\/(\d+)/);
+        if (yt) {
+          embed = `https://www.youtube.com/embed/${yt[1]}`;
+          thumb = thumb || `https://i.ytimg.com/vi/${yt[1]}/hqdefault.jpg`;
+        } else if (vimeo) {
+          embed = `https://player.vimeo.com/video/${vimeo[1]}`;
+        } else if (tiktok) {
+          embed = `https://www.tiktok.com/embed/v2/${tiktok[1]}`;
+        } else {
+          embed = v.url;
+        }
+      }
+      return { type: 'video' as const, url: v.url, thumb: thumb || '/brand/sellwave-mark.png', embed, videoEl: null as HTMLVideoElement | null,
+        pause: () => { const el = document.querySelector('.gallery video') as HTMLVideoElement | null; el?.pause(); } };
+    });
+    return [...imgs, ...vids];
+  }, [p]);
+
+  // pause video jab gallery tab change ho
+  useEffect(() => {
+    const el = document.querySelector('.gallery video') as HTMLVideoElement | null;
+    el?.pause();
+  }, [activeMedia]);
 
   async function add() {
     if (!p) return;
@@ -84,12 +122,27 @@ export function ProductDetail() {
   return (
     <main className="page product-detail">
       <div className="gallery">
-        {gallery[activeImage] ? <img src={gallery[activeImage].url} alt={gallery[activeImage].alt || p.name} loading={activeImage === 0 ? "eager" : "lazy"} /> : <div className="product-image large">SELL WAVE</div>}
-        {gallery.length > 1 && (
+        {media[activeMedia] && media[activeMedia].type === 'video' ? (
+          media[activeMedia].embed ? (
+            <iframe
+              src={media[activeMedia].embed}
+              title={`${p.name} video`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+              allowFullScreen
+              className="video-frame"
+            />
+          ) : (
+            <video key={media[activeMedia].url} src={media[activeMedia].url} poster={media[activeMedia].thumb} controls className="video-frame" />
+          )
+        ) : (
+          media[activeMedia] && <img src={media[activeMedia].url} alt={p.name} loading={activeMedia === 0 ? 'eager' : 'lazy'} />
+        )}
+        {media.length > 1 && (
           <div className="gallery-thumbs">
-            {gallery.map((img, i) => (
-              <button key={img.id ?? i} className={i === activeImage ? 'on' : ''} onClick={() => setActiveImage(i)} aria-label={`Image ${i + 1}`}>
-                <img src={img.url} alt="" loading="lazy" />
+            {media.map((m, i) => (
+              <button key={`${m.type}-${i}-${m.url.slice(-24)}`} className={i === activeImage ? 'on' : ''} onClick={() => setActiveMedia(i)} aria-label={m.type === 'video' ? 'Play video' : `Image ${i + 1}`}>
+                {m.type === 'video' && <span className="thumb-play">▶</span>}
+                <img src={m.thumb} alt="" loading="lazy" />
               </button>
             ))}
           </div>

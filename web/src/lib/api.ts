@@ -45,6 +45,7 @@ export type Product = {
   isFeatured?: boolean;
   status?: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
   images: { id?: string; url: string; alt?: string | null; sortOrder?: number }[];
+  videos?: { id: string; kind: 'upload' | 'embed'; url: string; thumbnailUrl?: string | null; sortOrder: number }[];
   category: { id?: string; name: string; slug: string };
   variants?: Variant[];
   reviews?: Review[];

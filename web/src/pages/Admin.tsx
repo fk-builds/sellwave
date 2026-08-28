@@ -55,6 +55,8 @@ export function Admin() {
   const [settings, setSettings] = useState<Settings | null>(null);
   const [openProduct, setOpenProduct] = useState<string | null>(null);
   const [uploadedProductImage, setUploadedProductImage] = useState('');
+  const [seoTitleLen, setSeoTitleLen] = useState(0);
+  const [seoDescLen, setSeoDescLen] = useState(0);
 
   const load = () =>
     Promise.all([
@@ -218,8 +220,10 @@ export function Admin() {
                 </div>
                 <input type="url" name="imageUrl" placeholder="…or paste an image URL (optional)" />
                 <textarea name="shortDescription" placeholder="Short description" />
-                <input name="seoTitle" placeholder="SEO title (optional)" />
-                <textarea name="seoDescription" placeholder="SEO description (optional)" />
+                <input name="seoTitle" maxLength={60} placeholder="SEO title (max 60 chars)" onChange={e => setSeoTitleLen(e.target.value.length)} />
+                <p className="minor" style={{ margin: '-6px 0 0' }}>{seoTitleLen}/60 characters</p>
+                <textarea name="seoDescription" maxLength={160} placeholder="SEO description (max 160 chars)" onChange={e => setSeoDescLen(e.target.value.length)} />
+                <p className="minor" style={{ margin: '-6px 0 0' }}>{seoDescLen}/160 characters</p>
                 <button className="button primary">Save draft product</button>
               </form>
             </section>

@@ -53,6 +53,7 @@ r.get('/products/:slug', async (req, res) => {
     where: { slug: String(req.params.slug) },
     include: {
       images: { orderBy: { sortOrder: 'asc' } },
+      videos: { orderBy: { sortOrder: 'asc' } },
       category: true,
       ...variantInclude,
       reviews: {

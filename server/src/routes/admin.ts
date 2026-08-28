@@ -117,6 +117,58 @@ r.delete('/products/:id/images/:imageId', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
+// ---------- Product media: videos (upload + external embed) + reorder ----------
+r.post('/products/:id/videos', async (req, res, next) => {
+  try {
+    const d = z.object({
+      kind: z.enum(['upload', 'embed']).default('upload'),
+      url: z.string().min(1).max(600),
+      thumbnailUrl: z.string().max(600).optional(),
+      sortOrder: z.coerce.number().int().min(0).optional(),
+    }).parse(req.body);
+    const p = await prisma.product.findUnique({ where: { id: String(req.params.id) } });
+    if (!p) return res.status(404).json({ message: 'Product not found.' });
+    const v = await prisma.productVideo.create({
+      data: { productId: p.id, kind: d.kind, url: d.url, thumbnailUrl: d.thumbnailUrl, sortOrder: d.sortOrder ?? 0 },
+    });
+    await audit(req.auth!.id, 'ADD_VIDEO', 'Product', p.id, { videoId: v.id, kind: d.kind });
+    res.status(201).json(v);
+  } catch (e) { next(e); }
+});
+
+r.delete('/products/:id/videos/:videoId', async (req, res, next) => {
+  try {
+    const v = await prisma.productVideo.findFirst({ where: { id: String(req.params.videoId), productId: String(req.params.id) } });
+    if (!v) return res.status(404).json({ message: 'Video not found.' });
+    await prisma.productVideo.delete({ where: { id: v.id } });
+    await audit(req.auth!.id, 'DELETE_VIDEO', 'Product', String(req.params.id), { videoId: v.id });
+    res.status(204).send();
+  } catch (e) { next(e); }
+});
+
+// Reorder media (images + videos) — accepts full ordered id lists
+r.put('/products/:id/media-order', async (req, res, next) => {
+  try {
+    const d = z.object({
+      images: z.array(z.string()).max(20).optional(),
+      videos: z.array(z.string()).max(10).optional(),
+    }).parse(req.body);
+    const pid = String(req.params.id);
+    if (d.images) {
+      for (const [i, id] of d.images.entries()) {
+        await prisma.productImage.updateMany({ where: { id, productId: pid }, data: { sortOrder: i } });
+      }
+    }
+    if (d.videos) {
+      for (const [i, id] of d.videos.entries()) {
+        await prisma.productVideo.updateMany({ where: { id, productId: pid }, data: { sortOrder: i } });
+      }
+    }
+    await audit(req.auth!.id, 'REORDER_MEDIA', 'Product', pid, { images: d.images?.length ?? 0, videos: d.videos?.length ?? 0 });
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
 // ---------- Product variants (size / colour with per-variant stock) ----------
 r.post('/products/:id/variants', async (req, res, next) => {
   try {
